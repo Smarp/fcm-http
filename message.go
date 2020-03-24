@@ -20,10 +20,6 @@ type Notification struct {
 	Body  string `json:"body"`
 }
 
-func (notification *Notification) isValid() bool {
-	return notification.Title != "" && notification.Body != ""
-}
-
 // NewMessage returns a new Message with the specified payload
 // and registration IDs.
 // @DEPRECATED as no validation here and client should create itself freely
@@ -31,9 +27,5 @@ func NewMessage(data map[string]interface{}, regIDs ...string) *Message {
 	return &Message{
 		RegistrationIDs: regIDs,
 		Data: data,
-		Notification: Notification{
-			Title: data["title"].(string),
-			Body: data["message"].(string),
-		},
 	}
 }
