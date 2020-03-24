@@ -75,6 +75,26 @@ func TestSendNoRetryInvalidMessage(t *testing.T) {
 	if _, err := sender.SendNoRetry(&Message{RegistrationIDs: []string{"1"}, TimeToLive: 2419201}); err == nil {
 		t.Fatal("test should fail when message TimeToLive field is greater than 2419200")
 	}
+
+	if _, err := sender.SendNoRetry(
+		&Message{
+			RegistrationIDs: []string{"1"},
+			TimeToLive:      2000,
+			Notification:    Notification{Title:"", Body: "hi"}},
+	); err == nil {
+
+		t.Fatal("test should fail when Notification.Title is empty")
+	}
+
+	if _, err := sender.SendNoRetry(
+		&Message{
+			RegistrationIDs: []string{"1"},
+			TimeToLive:      2000,
+			Notification:    Notification{Title:"title", Body: ""}},
+	); err == nil {
+
+		t.Fatal("test should fail when Notification.Body is empty")
+	}
 }
 
 func TestSendInvalidMessage(t *testing.T) {

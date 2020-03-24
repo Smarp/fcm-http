@@ -12,12 +12,16 @@ type Message struct {
 	TimeToLive            int                    `json:"time_to_live,omitempty"`
 	RestrictedPackageName string                 `json:"restricted_package_name,omitempty"`
 	DryRun                bool                   `json:"dry_run,omitempty"`
-	Notification          *Notification           `json:"notification"`
+	Notification          Notification           `json:"notification"`
 }
 
 type Notification struct {
 	Title string `json:"title"`
 	Body  string `json:"body"`
+}
+
+func (notification *Notification) isValid() bool {
+	return notification.Title != "" && notification.Body != ""
 }
 
 // NewMessage returns a new Message with the specified payload
@@ -27,7 +31,7 @@ func NewMessage(data map[string]interface{}, regIDs ...string) *Message {
 	return &Message{
 		RegistrationIDs: regIDs,
 		Data: data,
-		Notification: &Notification{
+		Notification: Notification{
 			Title: data["title"].(string),
 			Body: data["message"].(string),
 		},
