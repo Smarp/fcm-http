@@ -1,10 +1,13 @@
 package fcm
 
+import "context"
+
 // Message is used by the application server to send a message to
 // the FCM server. See the documentation for FCM Architectural
 // Overview for more information:
 // https://firebase.google.com/docs/cloud-messaging/http-server-ref
 type Message struct {
+	ctx                   context.Context
 	RegistrationIDs       []string               `json:"registration_ids"`
 	CollapseKey           string                 `json:"collapse_key,omitempty"`
 	Data                  map[string]interface{} `json:"data,omitempty"`
@@ -26,6 +29,11 @@ type Notification struct {
 func NewMessage(data map[string]interface{}, regIDs ...string) *Message {
 	return &Message{
 		RegistrationIDs: regIDs,
-		Data: data,
+		Data:            data,
 	}
+}
+
+// WithContext attach context to message
+func (m *Message) WithContext(ctx context.Context) {
+	m.ctx = ctx
 }
