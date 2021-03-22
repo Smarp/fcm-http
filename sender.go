@@ -47,7 +47,9 @@ func (s *Sender) SendNoRetry(msg *Message) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	req = req.WithContext(msg.ctx)
+	if msg.ctx != nil {
+		req = req.WithContext(msg.ctx)
+	}
 	req.Header.Add("Authorization", fmt.Sprintf("key=%s", s.ApiKey))
 	req.Header.Add("Content-Type", "application/json")
 
